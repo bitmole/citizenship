@@ -29,8 +29,10 @@ def main():
     for q in questions:
         all_answers, correct_answers = ask(q)
         a = int(input())
-        print('Answered:', all_answers[a])
+        answered, _ = all_answers[a]
+        print('Answered:', answered)
         print('Correct:', correct_answers)
+        print('Correct!' if answered in correct_answers else 'Wrong...')
         
 
 
