@@ -12,18 +12,25 @@ questions = [
 
 def ask(q):
     print(q['text'])
-    answers = {i:(k,v) for i, (k,v) in enumerate(q['answers'].items(), start=1)}
-    for k, v in answers.items():
+
+    all_answers = {i:(k,v) for i, (k,v) in enumerate(q['answers'].items(), start=1)}
+    correct_answers = [a for (a, correct) in all_answers.values() if correct]
+
+    for k, v in all_answers.items():
         answer, _ = v
         print('%d: %s' % (k, answer))
-    return answers
+
+    return all_answers, correct_answers
+
+def correct(answers):
+    return [a for (a, correct) in answers.values() if correct]
 
 def main():
     for q in questions:
-        answers = ask(q)
+        all_answers, correct_answers = ask(q)
         a = int(input())
-        print('Answered:', answers[a])
-        print('Correct:', [a for (a, correct) in answers.values() if correct])
+        print('Answered:', all_answers[a])
+        print('Correct:', correct_answers)
         
 
 
