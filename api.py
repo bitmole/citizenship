@@ -1,4 +1,51 @@
+import random
+
 questions = [
+    {
+        'text': 'Who did we fight in war of 1812?',
+        'answers': {
+             "France": False,
+             "England": True,
+             "Spain": False, 
+             "Russia": False,
+        },
+    },
+    {
+        'text': 'Who did we fight in war of 1812?',
+        'answers': {
+             "France": False,
+             "England": True,
+             "Spain": False, 
+             "Russia": False,
+        },
+    },
+    {
+        'text': 'Who did we fight in war of 1812?',
+        'answers': {
+             "France": False,
+             "England": True,
+             "Spain": False, 
+             "Russia": False,
+        },
+    },
+    {
+        'text': 'Who did we fight in war of 1812?',
+        'answers': {
+             "France": False,
+             "England": True,
+             "Spain": False, 
+             "Russia": False,
+        },
+    },
+    {
+        'text': 'Who did we fight in war of 1812?',
+        'answers': {
+             "France": False,
+             "England": True,
+             "Spain": False, 
+             "Russia": False,
+        },
+    },
     {
         'text': 'Who did we fight in war of 1812?',
         'answers': {
@@ -27,7 +74,11 @@ def check(answer, question):
     return answer in correct_answers_to(question)
 
 def main():
-    for q in questions:
+
+    random.shuffle(questions)
+
+    while questions:
+        q = questions.pop()
         numbered_answers = ask(q)
         i = int(input())
         a = numbered_answers[i]
