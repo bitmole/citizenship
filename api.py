@@ -72,6 +72,7 @@ def correct_answers_to(question):
 
 def check(answer, question):
     return answer in correct_answers_to(question)
+    # TODO: use set comparison to support multiple choice or text input
 
 def main():
 
