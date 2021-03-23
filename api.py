@@ -1,62 +1,6 @@
 import random
 import unittest
-
-questions = [
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": True,
-        },
-    },
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": True, 
-             "Russia": False,
-        },
-    },
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
-    },
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
-    },
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
-    },
-    {
-        'text': 'Who did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
-    },
-]
+import questions
 
 def ask(q):
     print(q['text'])
@@ -75,7 +19,6 @@ def correct_answers_to(question):
     return [a for (a, correct) in question['answers'].items() if correct]
 
 def main():
-
     random.shuffle(questions)
 
     while questions:
