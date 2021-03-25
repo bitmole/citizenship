@@ -12,28 +12,25 @@ def ask(q):
 
     return numbered_answers
 
-def check(answers, question):
-    return set(answers) == set(correct_answers_to(question))
-
-def correct_answers_to(question):
-    return [a for (a, correct) in question['answers'].items() if correct]
 
 def main():
-    random.shuffle(questions)
+    test = questions.random_quiz()
 
-    while questions:
-        q = questions.pop()
-        options = ask(q)
+    while test:
+        qid = test.pop()
+        question = questions.get_question(qid)
+        options = ask(question)
         selected = input().split(',')
         answers = [v for (k,v) in options.items() if k in selected]
 
-        print('correct' if check(answers, q) else 'wrong')
-        print('Correct answer(s):', ' '.join(correct_answers_to(q)))
+        ok, correct, _ = questions.check_answers(answers, question)
+
+        print('correct' if ok else 'wrong')
+        print('Correct answer(s):', ', '.join(correct))
 
 class CitizenshipTest(unittest.TestCase):
 
-    q = {
-        'text': 'Question with 2 correct options',
+    q = { 'text': 'Question with 2 correct options',
         'answers': {
              "France": False,
              "England": True,
@@ -41,30 +38,36 @@ class CitizenshipTest(unittest.TestCase):
              "Russia": True,
         },
     }
-    
+
     def test_check_complete_answer(self):
         answers = ['England', 'Russia']
-        self.assertTrue(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertTrue(ok)
 
     def test_check_complete_answer_different_order(self):
         answers = ['Russia', 'England']
-        self.assertTrue(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertTrue(ok)
 
     def test_check_incomplete_answer(self):
         answers = ['England']
-        self.assertFalse(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertFalse(ok)
 
     def test_check_wrong_answer(self):
         answers = ['Spain']
-        self.assertFalse(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertFalse(ok)
 
     def test_check_invalid_answer(self):
         answers = ['Foo']
-        self.assertFalse(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertFalse(ok)
 
     def test_check_empty_answer(self):
         answers = []
-        self.assertFalse(check(answers, self.q))
+        ok, _, _ = questions.check_answers(answers, self.q)
+        self.assertFalse(ok)
 
 if __name__ == "__main__":
     # main()

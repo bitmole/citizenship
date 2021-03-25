@@ -73,12 +73,21 @@ def slugify(value, allow_unicode=False):
     value = re.sub(r'[^\w\s-]', '', value).strip().lower()
     return re.sub(r'[-\s]+', '-', value)
 
-_questions_dict = {slugify(q['text']):q for q in _questions}
+def check_answers(answers, question):
+    correct = [a for (a, correct) 
+            in question['answers'].items() 
+            if correct]
+    incorrect = [a for (a, correct) 
+            in question['answers'].items() 
+            if not correct]
+    return set(answers) == set(correct), correct, incorrect
 
 def random_quiz():
     ids = list(_questions_dict.keys())
     random.shuffle(ids)
     return ids
 
-def get(qid): 
+def get_question(qid): 
     return _questions_dict[qid]
+
+_questions_dict = {slugify(q['text']):q for q in _questions}
