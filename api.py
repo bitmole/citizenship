@@ -2,6 +2,7 @@ import random
 import unittest
 import questions
 
+
 def ask(q):
     print(q['text'])
 
@@ -13,23 +14,7 @@ def ask(q):
     return numbered_answers
 
 
-def main():
-    test = questions.random_quiz()
-
-    while test:
-        qid = test.pop()
-        question = questions.get_question(qid)
-        options = ask(question)
-        selected = input().split(',')
-        answers = [v for (k,v) in options.items() if k in selected]
-
-        ok, correct, _ = questions.check_answers(answers, question)
-
-        print('correct' if ok else 'wrong')
-        print('Correct answer(s):', ', '.join(correct))
-
 class CitizenshipTest(unittest.TestCase):
-
     q = { 'text': 'Question with 2 correct options',
         'answers': {
              "France": False,
@@ -69,6 +54,23 @@ class CitizenshipTest(unittest.TestCase):
         ok, _, _ = questions.check_answers(answers, self.q)
         self.assertFalse(ok)
 
+
+def main():
+    test = questions.random_quiz()
+
+    while test:
+        qid = test.pop()
+        question = questions.get_question(qid)
+        options = ask(question)
+        selected = input().split(',')
+        answers = [v for (k,v) in options.items() if k in selected]
+
+        ok, correct, _ = questions.check_answers(answers, question)
+
+        print('correct' if ok else 'wrong')
+        print('Correct answer(s):', ', '.join(correct))
+
+
 if __name__ == "__main__":
-    # main()
     unittest.main()
+    main()
