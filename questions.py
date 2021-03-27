@@ -80,6 +80,13 @@ def check_answers(answers, question):
     incorrect = [a for (a, correct) 
             in question['answers'].items() 
             if not correct]
+
+    if question.get('type', None) == 'free_text':
+        if len(answers) < question.get('min_correct_count', 0):
+            return False, correct, incorrect
+        else:
+            return set(answers).issubset(set(correct)), correct, incorrect
+
     return set(answers) == set(correct), correct, incorrect
 
 def random_quiz():

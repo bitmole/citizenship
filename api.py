@@ -3,15 +3,6 @@ import unittest
 import questions
 
 
-def ask(q):
-    print(q['text'])
-
-    numbered_answers = {str(i):k for i, k in enumerate(q['answers'].keys(), start=1)}
-
-    for i, answer in numbered_answers.items():
-        print('%s: %s' % (i, answer))
-
-    return numbered_answers
 
 
 class CitizenshipTest(unittest.TestCase):
@@ -21,6 +12,18 @@ class CitizenshipTest(unittest.TestCase):
              "England": True,
              "Spain": False, 
              "Russia": True,
+        },
+    }
+
+    q_free_text = { 
+        'text': 'Name one American Indian tribe in the United States.',
+        'type': 'free_text',
+        'min_correct_count': 1,
+        'answers': {
+             "Cherokee": True,
+             "Navajo": True,
+             "Sioux": True, 
+             "Chippewa": True,
         },
     }
 
@@ -54,6 +57,31 @@ class CitizenshipTest(unittest.TestCase):
         ok, _, _ = questions.check_answers(answers, self.q)
         self.assertFalse(ok)
 
+    def test_check_free_text_answer_correct(self):
+        answers = ['Navajo', 'Sioux']
+        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        self.assertTrue(ok)
+
+    def test_check_free_text_answer_incorrect(self):
+        answers = ['foo', 'bar']
+        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        self.assertFalse(ok)
+
+    def test_check_free_text_answer_incomplete(self):
+        answers = []
+        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        self.assertFalse(ok)
+
+
+def present(q):
+    print(q['text'])
+
+    numbered_answers = {str(i):k for i, k in enumerate(q['answers'].keys(), start=1)}
+
+    for i, answer in numbered_answers.items():
+        print('%s: %s' % (i, answer))
+
+    return numbered_answers
 
 def main():
     test = questions.random_quiz()
@@ -61,9 +89,11 @@ def main():
     while test:
         qid = test.pop()
         question = questions.get_question(qid)
-        options = ask(question)
-        selected = input().split(',')
-        answers = [v for (k,v) in options.items() if k in selected]
+        options = present(question)
+
+        answers = input().split(',')
+        if question.get('type', None) != 'options':
+            answers = [v for (k,v) in options.items() if k in answers]
 
         ok, correct, _ = questions.check_answers(answers, question)
 
@@ -72,5 +102,5 @@ def main():
 
 
 if __name__ == "__main__":
+    # main()
     unittest.main()
-    main()
