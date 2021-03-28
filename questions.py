@@ -74,7 +74,8 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value)
 
 def normalize(submitted, correct):
-    return [s.lower() for s in submitted], [s.lower() for s in correct]
+    return ([s.strip().lower() for s in submitted],
+            [s.strip().lower() for s in correct])
 
 def check_answers(submitted, question):
     correct = [a for (a, correct) 

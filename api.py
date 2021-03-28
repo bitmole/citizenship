@@ -77,6 +77,11 @@ class CitizenshipTest(unittest.TestCase):
         ok, _, _ = questions.check_answers(answers, self.q_free_text)
         self.assertTrue(ok)
 
+    def test_check_free_text_answer_correct_extra_spaces(self):
+        answers = ['   Navajo   ', '  Sioux         ']
+        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        self.assertTrue(ok)
+
 
 def present(q):
     print(q['text'])
