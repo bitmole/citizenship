@@ -73,7 +73,10 @@ def slugify(value, allow_unicode=False):
     value = re.sub(r'[^\w\s-]', '', value).strip().lower()
     return re.sub(r'[-\s]+', '-', value)
 
-def check_answers(answers, question):
+def normalize(submitted, correct):
+    return [s.lower() for s in submitted], [s.lower() for s in correct]
+
+def check_answers(submitted, question):
     correct = [a for (a, correct) 
             in question['answers'].items() 
             if correct]
@@ -82,12 +85,13 @@ def check_answers(answers, question):
             if not correct]
 
     if question.get('type', None) == 'free_text':
-        if len(answers) < question.get('min_correct_count', 0):
+        if len(submitted) < question.get('min_correct_count', 0):
             return False, correct, incorrect
         else:
-            return set(answers).issubset(set(correct)), correct, incorrect
+            a, b = normalize(submitted, correct)
+            return set(a).issubset(set(b)), correct, incorrect
 
-    return set(answers) == set(correct), correct, incorrect
+    return set(submitted) == set(correct), correct, incorrect
 
 def random_quiz():
     ids = list(_questions_dict.keys())
