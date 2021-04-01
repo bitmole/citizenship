@@ -76,7 +76,7 @@ def check_answers(submitted, question):
 
     return set(submitted) == set(correct), correct, incorrect
 
-def random_quiz():
+def random_test():
     ids = list(_questions_dict.keys())
     random.shuffle(ids)
     return ids

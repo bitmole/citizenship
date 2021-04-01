@@ -92,7 +92,7 @@ def present(q):
     return numbered_answers
 
 def main():
-    test = api.random_quiz()
+    test = api.random_test()
 
     while test:
         qid = test.pop()
