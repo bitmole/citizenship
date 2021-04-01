@@ -1,8 +1,6 @@
 import random
 import unittest
-import questions
-
-
+import api
 
 
 class CitizenshipTest(unittest.TestCase):
@@ -29,57 +27,57 @@ class CitizenshipTest(unittest.TestCase):
 
     def test_check_complete_answer(self):
         answers = ['England', 'Russia']
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertTrue(ok)
 
     def test_check_complete_answer_different_order(self):
         answers = ['Russia', 'England']
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertTrue(ok)
 
     def test_check_incomplete_answer(self):
         answers = ['England']
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertFalse(ok)
 
     def test_check_wrong_answer(self):
         answers = ['Spain']
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertFalse(ok)
 
     def test_check_invalid_answer(self):
         answers = ['Foo']
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertFalse(ok)
 
     def test_check_empty_answer(self):
         answers = []
-        ok, _, _ = questions.check_answers(answers, self.q)
+        ok, _, _ = api.check_answers(answers, self.q)
         self.assertFalse(ok)
 
     def test_check_free_text_answer_correct(self):
         answers = ['Navajo', 'Sioux']
-        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        ok, _, _ = api.check_answers(answers, self.q_free_text)
         self.assertTrue(ok)
 
     def test_check_free_text_answer_incorrect(self):
         answers = ['foo', 'bar']
-        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        ok, _, _ = api.check_answers(answers, self.q_free_text)
         self.assertFalse(ok)
 
     def test_check_free_text_answer_incomplete(self):
         answers = []
-        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        ok, _, _ = api.check_answers(answers, self.q_free_text)
         self.assertFalse(ok)
 
     def test_check_free_text_answer_correct_mixed_case(self):
         answers = ['naVajo', 'SIOuX']
-        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        ok, _, _ = api.check_answers(answers, self.q_free_text)
         self.assertTrue(ok)
 
     def test_check_free_text_answer_correct_extra_spaces(self):
         answers = ['   Navajo   ', '  Sioux         ']
-        ok, _, _ = questions.check_answers(answers, self.q_free_text)
+        ok, _, _ = api.check_answers(answers, self.q_free_text)
         self.assertTrue(ok)
 
 
@@ -94,18 +92,18 @@ def present(q):
     return numbered_answers
 
 def main():
-    test = questions.random_quiz()
+    test = api.random_quiz()
 
     while test:
         qid = test.pop()
-        question = questions.get_question(qid)
+        question = api.get_question(qid)
         options = present(question)
 
         answers = input().split(',')
         if question.get('type', None) != 'options':
             answers = [v for (k,v) in options.items() if k in answers]
 
-        ok, correct, _ = questions.check_answers(answers, question)
+        ok, correct, _ = api.check_answers(answers, question)
 
         print('correct' if ok else 'wrong')
         print('Correct answer(s):', ', '.join(correct))
