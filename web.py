@@ -1,22 +1,21 @@
-from flask import Flask, url_for, redirect
+from flask import Flask, url_for, redirect, render_template
 
 import api
 
 app = Flask(__name__)
 
 @app.route('/')
-def start():
+def home():
+    return render_template('home.html')
+
+@app.route('/test/')
+def test():
     test = api.random_test()
     first = test.pop()
     # TODO: save rest of test in "session"
-    return redirect(url_for('question', id=first))
+    return redirect(url_for('questions', id=first))
 
-@app.route('/question/<id>/')
-def question(id):
+@app.route('/questions/<id>/')
+def questions(id):
     q = api.get_question(id)
-    return _present(q)
-
-def _present(question):
-    # TODO: generate dynamic web form
-    return question['text']
-
+    return render_template('question.html', question=q, title=q['text'])
