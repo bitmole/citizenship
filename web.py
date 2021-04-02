@@ -19,7 +19,5 @@ def test():
 def questions(id):
     q = api.get_question(id)
     return render_template('question.html', 
-            id=id,
-            question=q['text'], 
-            answers=q['answers'].keys(),
+            question=q, 
             title=q['text'])
