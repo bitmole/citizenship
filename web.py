@@ -8,11 +8,11 @@ app = Flask(__name__)
 def home():
     return render_template('home.html')
 
-@app.route('/test/')
-def test():
-    test = api.random_test()
-    first = test.pop()
-    # TODO: save rest of test in "session"
+@app.route('/start/')
+def start():
+    start = api.random_test()
+    first = start.pop()
+    # TODO: save rest of start in "session"
     return redirect(url_for('questions', id=first))
 
 @app.route('/questions/<id>/')
