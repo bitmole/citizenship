@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, render_template
+from flask import Flask, url_for, redirect, render_template, abort
 
 import api
 
@@ -17,7 +17,11 @@ def start():
 
 @app.route('/questions/<id>/')
 def questions(id):
-    q = api.get_question(id)
+    try:
+        q = api.get_question(id)
+    except KeyError:
+        abort(404)
+
     return render_template('question.html', 
             question=q, 
             title=q['text'])
