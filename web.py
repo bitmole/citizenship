@@ -23,7 +23,10 @@ def questions(id):
         abort(404)
 
     if request.method == 'POST':
-        return request.form['choices']
+        answers = request.form['choices'].split() # handle different types
+        ok, correct, incorrect = api.check_answers(answers, q)
+        # TODO: render answer eval template with next link
+        return ''.join(answers) + (' is correct' if ok else ' is incorrect')
 
     return render_template('question.html', 
             question=q, 
