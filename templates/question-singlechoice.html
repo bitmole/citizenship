@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1> {{ question.text }}</h1>
+    <form method="post" accept-charset="utf-8">
+    {% for a in question.answers %}
+      <input type="radio" value="{{a}}" name="answers" id="{{a}}" required>
+      <label for="{{a}}">{{a}}</label>
+    {% endfor %}
+    <input type="submit" value="Submit" name="" id=""/>
+    </form>
+{% endblock %}

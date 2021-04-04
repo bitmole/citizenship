@@ -59,6 +59,8 @@ _questions = [
     },
 ]
 
+_questions_dict = {slugify(q['text']):q for q in _questions}
+
 def check_answers(submitted, question):
     correct = [a for (a, correct) 
             in question['answers'].items() 
@@ -67,8 +69,8 @@ def check_answers(submitted, question):
             in question['answers'].items() 
             if not correct]
 
-    if question.get('type', None) == 'free_text':
-        if len(submitted) < question.get('min_correct_count', 0):
+    if question.get('type', None) == 'freetext':
+        if len(submitted) < question.get('min_correct_count', 1):
             return False, correct, incorrect
         else:
             a, b = normalize(submitted, correct)
@@ -84,4 +86,17 @@ def random_test():
 def get_question(qid): 
     return _questions_dict[qid]
 
-_questions_dict = {slugify(q['text']):q for q in _questions}
+def is_freetext(q):
+    return q.get('type', None) == 'freetext'
+
+def is_multichoice(q):
+    correct = [a for (a, correct) 
+            in q['answers'].items() 
+            if correct]
+    return len(correct) > 1
+
+def is_singlechoice(q):
+    correct = [a for (a, correct) 
+            in q['answers'].items() 
+            if correct]
+    return len(correct) == 1

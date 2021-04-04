@@ -23,7 +23,7 @@ def questions(id):
         abort(404)
 
     if request.method == 'POST':
-        answers = request.form['choices'].split() # handle different types
+        answers = request.form.getlist('answers')
         result, correct, _ = api.check_answers(answers, q)
 
         #TODO: get next question from session
@@ -34,10 +34,19 @@ def questions(id):
                 correct=correct,
                 next=url_for('questions', id=next_question()))
 
-    return render_template('question.html', 
+    return render_template(question_template(q),
             question=q, 
             title=q['text'])
 
 def next_question():
     #TODO: get next question from session
     return api.random_test().pop()
+
+def question_template(q):
+    if api.is_freetext(q):
+        return 'question-freetext.html'
+    elif api.is_multichoice(q):
+        return 'question-multichoice.html'
+    elif api.is_singlechoice(q):
+        return 'question-singlechoice.html'
+

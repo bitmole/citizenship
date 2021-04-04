@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1> {{ question.text }}</h1>
+    <form method="post" accept-charset="utf-8">
+	<label for="answers">Your answers:</label>
+	<textarea name="answers" id="answers" required>
+	<input type="submit" value="Submit" name="" id=""/>
+    </form>
+{% endblock %}
