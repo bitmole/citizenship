@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+    <h1> {{ question.text }}</h1>
+    {% if result %}
+	    <p>{{ answers }} is correct!</p>
+    {% else %}
+	    <p>{{ answers }} is not correct!</p>
+	    <p>Correct answers:</p>
+	    {{ correct }}
+    {% endif %}
+    <a href="{{ next }}" >Next Question</a>
+{% endblock %}

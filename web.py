@@ -24,10 +24,20 @@ def questions(id):
 
     if request.method == 'POST':
         answers = request.form['choices'].split() # handle different types
-        ok, correct, incorrect = api.check_answers(answers, q)
-        # TODO: render answer eval template with next link
-        return ''.join(answers) + (' is correct' if ok else ' is incorrect')
+        result, correct, _ = api.check_answers(answers, q)
+
+        #TODO: get next question from session
+        return render_template('result.html',
+                result=result,
+                question=q,
+                answers=answers,
+                correct=correct,
+                next=url_for('questions', id=next_question()))
 
     return render_template('question.html', 
             question=q, 
             title=q['text'])
+
+def next_question():
+    #TODO: get next question from session
+    return api.random_test().pop()
