@@ -38,6 +38,7 @@ _questions = [
              "Spain": False, 
              "Russia": False,
         },
+        'type': 'freetext'
     },
     {
         'text': 'What did we fight in war of 1812?',

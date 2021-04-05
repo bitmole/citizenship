@@ -23,7 +23,7 @@ def questions(id):
         abort(404)
 
     if request.method == 'POST':
-        answers = request.form.getlist('answers')
+        answers = getlist('answers', q, request)
         result, correct, _ = api.check_answers(answers, q)
 
         #TODO: get next question from session
@@ -50,3 +50,8 @@ def question_template(q):
     elif api.is_singlechoice(q):
         return 'question-singlechoice.html'
 
+def getlist(key, q, request):
+    if api.is_freetext(q):
+        return request.form[key].split(',')
+    else:
+        return request.form.getlist(key)
