@@ -1,4 +1,4 @@
-from flask import Flask, url_for, redirect, render_template, abort, request
+from flask import Flask, url_for, redirect, render_template, abort, request, jsonify
 
 import api
 
@@ -14,6 +14,10 @@ def start():
     first = start.pop()
     # TODO: save rest of start in "session"
     return redirect(url_for('questions', id=first))
+
+@app.route('/random-test.json')
+def random_test():
+    return jsonify(api.random_test())
 
 @app.route('/questions/<id>/', methods=['POST', 'GET'])
 def questions(id):
