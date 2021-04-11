@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+
 {% block content %}
     <h1> {{ question.text }}</h1>
     {% if result %}
@@ -8,5 +9,42 @@
 	    <p>Correct answers:</p>
 	    {{ correct }}
     {% endif %}
-    <a href="{{ next }}" >Next Question</a>
+    <a id='next-question'>Next Question</a>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript" charset="utf-8">
+  var CACHE_KEY = '/random-test.json';
+
+  async function next() {
+    const cache = await caches.open('cit-cache');
+    const response = await cache.match(CACHE_KEY);
+    questions = await response.json();
+    console.log(`fetched ${questions.length} questions from cache`);
+    console.log(questions)
+    next = questions.shift();
+    console.log(`next: ${next}`);
+
+    a = document.getElementById('next-question'); 
+    if (next) {
+      a.href = `/questions/${next}/`;
+    } else {
+      a.href = "{{ url_for('finish') }}";
+      a.innerHTML = 'Finish!';
+    }
+
+    // replace cache with rest of questions
+    console.log(`putting ${questions.length} questions into cache`);
+    console.log(questions)
+    const options = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+    const cash = await caches.open('cit-cache');
+    cash.put(CACHE_KEY, new Response(JSON.stringify(questions), options));
+  }
+
+  next();
+</script>
 {% endblock %}

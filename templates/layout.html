@@ -6,6 +6,9 @@
     <title>{{ title }}</title>
   </head>
   <body>
+    <div id="nav">
+      <a href="{{ url_for('home') }}">Home</a>
+    </div>
     {% block content %} {% endblock %}
     {% block script %} {% endblock %}
   </body>
