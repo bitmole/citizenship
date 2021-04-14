@@ -1,46 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-    <a id="next-question">Start your test</a>
+<div id='next-question'></div>
 {% endblock %}
 
 {% block script %}
-<script type="text/javascript" charset="utf-8">
-  var CACHE_KEY = '/random-test.json';
-
-  async function init() {
-    console.log('caching questions');
-    const cache = await caches.open('cit-cache');
-    return cache.add(CACHE_KEY);
-  }
-
-  async function next() {
-    cache = await caches.open('cit-cache');
-    const response = await cache.match(CACHE_KEY);
-    questions = await response.json();
-    console.log(`fetched ${questions.length} questions from cache`);
-    console.log(questions)
-    next = questions.shift();
-    console.log(`next: ${next}`);
-
-
-    a = document.getElementById('next-question');
-    a.href = '/questions/' + next;
-
-    // replace cache with rest of questions
-    console.log(`putting ${questions.length} questions into cache`);
-    console.log(questions)
-    const options = {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }
-    cache = await caches.open('cit-cache');
-    cache.put(CACHE_KEY, new Response(JSON.stringify(questions), options));
-  }
+<script type="module" charset="utf-8">
+  import { init, next, create_next_link } from "{{ url_for('static', filename='cit.js') }}";
 
   init().then(() => { 
-    next(); 
+    next().then((url) => {
+      create_next_link(url, 'next-question', 'Start your test');
+    }); 
   });
 </script>
 {% endblock %}
