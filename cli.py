@@ -15,7 +15,7 @@ class CitizenshipTest(unittest.TestCase):
 
     q_free_text = { 
         'text': 'Name one American Indian tribe in the United States.',
-        'type': 'free_text',
+        'type': 'freetext',
         'min_correct_count': 1,
         'answers': {
              "Cherokee": True,

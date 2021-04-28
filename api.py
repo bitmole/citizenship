@@ -4,21 +4,21 @@ from utils import slugify, normalize
 
 _questions = [
     {
-        'text': 'Who did we fight in war of 1812?',
+        'text': 'What is the supreme law of the land?',
         'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": True,
+             "the Declaration of Independence": False,
+             "the Constitution": True,
+             "the Common Law": False, 
+             "the Bible": False,
         },
     },
     {
-        'text': 'How did we fight in war of 1812?',
+        'text': 'What does the Constitution do?',
         'answers': {
-             "France": False,
-             "England": True,
-             "Spain": True, 
-             "Russia": False,
+             "Sets up the government": True,
+             "Defines the government": True,
+             "Protects basic rights of Americans": True, 
+             "Specifies the ruling party": False,
         },
     },
     {
@@ -70,14 +70,16 @@ def check_answers(submitted, question):
             in question['answers'].items() 
             if not correct]
 
-    if question.get('type', None) == 'freetext':
-        if len(submitted) < question.get('min_correct_count', 1):
-            return False, correct, incorrect
-        else:
-            a, b = normalize(submitted, correct)
-            return set(a).issubset(set(b)), correct, incorrect
+    submitted, correct = normalize(submitted, correct)
+    submitted, correct = set(submitted), set(correct)
+    
+    if is_freetext(question):
+        has_min_correct_count = len(submitted) >= question.get('min_correct_count', 1)
+        result = has_min_correct_count and submitted.issubset(correct)
+    else: # question type is a choice
+        result = submitted == correct
 
-    return set(submitted) == set(correct), correct, incorrect
+    return result, correct, incorrect
 
 def random_test():
     ids = list(_questions_dict.keys())
