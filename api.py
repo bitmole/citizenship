@@ -5,72 +5,61 @@ from utils import slugify, normalize
 _questions = [
     {
         'text': 'What is the supreme law of the land?',
-        'answers': {
-             "the Declaration of Independence": False,
-             "the Constitution": True,
-             "the Common Law": False, 
-             "the Bible": False,
-        },
+        'correct': [
+            'The Constitution',
+        ],
+        'incorrect': [
+             "the Declaration of Independence",
+             "the Constitution",
+             "the Common Law",
+             "the Bible",
+        ],
     },
     {
         'text': 'What does the Constitution do?',
-        'answers': {
-             "Sets up the government": True,
-             "Defines the government": True,
-             "Protects basic rights of Americans": True, 
-             "Specifies the ruling party": False,
-        },
+        'correct': [
+             "Sets up the government",
+             "Defines the government",
+             "Protects basic rights of Americans",
+        ],
+        'incorrect': [
+             "Specifies the ruling party",
+        ],
     },
     {
         'text': 'When did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
+        'correct': [
+             "England",
+        ],
+        'incorrect': [
+             "France",
+             "Spain",
+             "Russia",
+        ],
     },
     {
-        'text': 'Why did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
+        'text': 'Name one native American tribe',
+        'correct': [
+            'Ute', 
+            'Navajo', 
+            'Sioux', 
+            'Apache', 
+            'Cherokee',
+        ],
         'type': 'freetext'
-    },
-    {
-        'text': 'What did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
-    },
-    {
-        'text': 'Whom did we fight in war of 1812?',
-        'answers': {
-             "France": False,
-             "England": True,
-             "Spain": False, 
-             "Russia": False,
-        },
     },
 ]
 
 _questions_dict = {slugify(q['text']):q for q in _questions}
 
-def check_answers(submitted, question):
-    correct = [a for (a, correct) 
-            in question['answers'].items() 
-            if correct]
-    incorrect = [a for (a, correct) 
-            in question['answers'].items() 
-            if not correct]
+def correct_answers_to(q):
+    return q.get('correct', [])
 
-    submitted, correct = normalize(submitted, correct)
+def incorrect_answers_to(q):
+    return q.get('incorrect', [])
+
+def check_answers(submitted, question):
+    submitted, correct = normalize(submitted, correct_answers_to(question))
     submitted, correct = set(submitted), set(correct)
     
     if is_freetext(question):
@@ -79,7 +68,7 @@ def check_answers(submitted, question):
     else: # question type is a choice
         result = submitted == correct
 
-    return result, correct, incorrect
+    return result, correct, incorrect_answers_to(question)
 
 def random_test():
     ids = list(_questions_dict.keys())
@@ -89,17 +78,16 @@ def random_test():
 def get_question(qid): 
     return _questions_dict[qid]
 
+def get_options(question):
+    options = correct_answers_to(question) + incorrect_answers_to(question)
+    random.shuffle(options)
+    return options
+
 def is_freetext(q):
     return q.get('type', None) == 'freetext'
 
 def is_multichoice(q):
-    correct = [a for (a, correct) 
-            in q['answers'].items() 
-            if correct]
-    return len(correct) > 1
+    return len(correct_answers_to(q)) > 1
 
 def is_singlechoice(q):
-    correct = [a for (a, correct) 
-            in q['answers'].items() 
-            if correct]
-    return len(correct) == 1
+    return len(correct_answers_to(q)) == 1

@@ -35,6 +35,7 @@ def questions(id):
 
     return render_template(question_template(q),
             question=q, 
+            answers=api.get_options(q),
             title=q['text'])
 
 def question_template(q):

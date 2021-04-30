@@ -2,7 +2,7 @@
 {% block content %}
     <h1> {{ question.text }}</h1>
     <form method="post" accept-charset="utf-8">
-    {% for a in question.answers %}
+    {% for a in answers %}
       <input type="radio" value="{{a}}" name="answers" id="{{a}}" required>
       <label for="{{a}}">{{a}}</label>
     {% endfor %}
