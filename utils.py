@@ -16,6 +16,8 @@ def slugify(value, allow_unicode=False):
     return re.sub(r'[-\s]+', '-', value)
 
 
-def normalize(submitted, correct):
-    return ([s.strip().lower() for s in submitted],
-            [s.strip().lower() for s in correct])
+def normalize(*args):
+    normalized = []
+    for arg in args:
+        normalized.append([s.strip().lower() for s in arg])
+    return normalized

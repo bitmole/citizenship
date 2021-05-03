@@ -68,7 +68,7 @@ def check_answers(submitted, question):
     else: # question type is a choice
         result = submitted == correct
 
-    return result, correct, incorrect_answers_to(question)
+    return result, correct_answers_to(question), incorrect_answers_to(question)
 
 def random_test():
     ids = list(_questions_dict.keys())
@@ -76,11 +76,14 @@ def random_test():
     return ids
 
 def get_question(qid): 
-    return _questions_dict[qid]
+    q = _questions_dict[qid]
+    q['options'] = get_options(q)
+    return q
 
-def get_options(question):
+def get_options(question, shuffled=True):
     options = correct_answers_to(question) + incorrect_answers_to(question)
-    random.shuffle(options)
+    if shuffled: 
+        random.shuffle(options)
     return options
 
 def is_freetext(q):

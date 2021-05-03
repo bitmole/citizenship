@@ -1,91 +1,11 @@
 import random
-import unittest
 import api
 
-
-class CitizenshipTest(unittest.TestCase):
-    q = { 'text': 'Question with 2 correct options',
-        'correct': [
-             "England",
-             "Russia",
-        ],
-        'incorrect':[
-             "France",
-             "Spain",
-        ],
-    }
-
-    q_free_text = { 
-        'text': 'Name one American Indian tribe in the United States.',
-        'type': 'freetext',
-        'correct': [
-             "Cherokee",
-             "Navajo",
-             "Sioux",
-             "Chippewa",
-        ],
-    }
-
-    def test_check_complete_answer(self):
-        answers = ['England', 'Russia']
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertTrue(ok)
-
-    def test_check_complete_answer_different_order(self):
-        answers = ['Russia', 'England']
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertTrue(ok)
-
-    def test_check_incomplete_answer(self):
-        answers = ['England']
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertFalse(ok)
-
-    def test_check_wrong_answer(self):
-        answers = ['Spain']
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertFalse(ok)
-
-    def test_check_invalid_answer(self):
-        answers = ['Foo']
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertFalse(ok)
-
-    def test_check_empty_answer(self):
-        answers = []
-        ok, _, _ = api.check_answers(answers, self.q)
-        self.assertFalse(ok)
-
-    def test_check_free_text_answer_correct(self):
-        answers = ['Navajo', 'Sioux']
-        ok, _, _ = api.check_answers(answers, self.q_free_text)
-        self.assertTrue(ok)
-
-    def test_check_free_text_answer_incorrect(self):
-        answers = ['foo', 'bar']
-        ok, _, _ = api.check_answers(answers, self.q_free_text)
-        self.assertFalse(ok)
-
-    def test_check_free_text_answer_incomplete(self):
-        answers = []
-        ok, _, _ = api.check_answers(answers, self.q_free_text)
-        self.assertFalse(ok)
-
-    def test_check_free_text_answer_correct_mixed_case(self):
-        answers = ['naVajo', 'SIOuX']
-        ok, _, _ = api.check_answers(answers, self.q_free_text)
-        self.assertTrue(ok)
-
-    def test_check_free_text_answer_correct_extra_spaces(self):
-        answers = ['   Navajo   ', '  Sioux         ']
-        ok, _, _ = api.check_answers(answers, self.q_free_text)
-        self.assertTrue(ok)
-
-
 def present(q):
+    assert(q is not None)
     print(q['text'])
 
-    numbered_answers = {str(i):k for i, k in enumerate(api.get_options(q), start=1)}
+    numbered_answers = {str(i):k for i, k in enumerate(q['options'], start=1)}
 
     for i, answer in numbered_answers.items():
         print('%s: %s' % (i, answer))
@@ -111,4 +31,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # unittest.main()
