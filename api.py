@@ -46,7 +46,7 @@ _questions = [
             'Apache', 
             'Cherokee',
         ],
-        'type': 'freetext'
+        'choice': False
     },
 ]
 
@@ -86,11 +86,14 @@ def get_options(question, shuffled=True):
         random.shuffle(options)
     return options
 
-def is_freetext(q):
-    return q.get('type', None) == 'freetext'
+def is_choice(q):
+    return q.get('choice', True)
 
 def is_multichoice(q):
-    return len(correct_answers_to(q)) > 1
+    return is_choice(q) and len(correct_answers_to(q)) > 1
 
 def is_singlechoice(q):
-    return len(correct_answers_to(q)) == 1
+    return is_choice(q) and len(correct_answers_to(q)) == 1
+
+def is_freetext(q):
+    return not is_choice(q)
